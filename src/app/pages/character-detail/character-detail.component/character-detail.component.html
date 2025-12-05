@@ -1,0 +1,279 @@
+<div class="min-h-screen bg-black">
+  @if (loading) {
+  <app-spinner></app-spinner>
+  } @else if (error || !character) {
+    <!-- Error State -->
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-red-400 text-6xl mb-4">⚠️</div>
+        <h2 class="text-2xl font-bold text-red-400 mb-4">
+          {{ error || 'Personagem não encontrado' }}
+        </h2>
+        <a 
+          [routerLink]="['/characters']" 
+          class="text-yellow-400 hover:text-yellow-300 inline-block mt-4"
+        >
+          Voltar aos personagens
+        </a>
+      </div>
+    </div>
+  } @else {
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center">
+      <div class="absolute inset-0">
+        <!-- Image Loading State -->
+        @if (imageLoading) {
+          <div class="w-full h-full bg-gray-900 flex items-center justify-center">
+            <div class="text-center">
+              <div class="w-12 h-12 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p class="text-yellow-400 text-sm">Carregando imagem...</p>
+            </div>
+          </div>
+        }
+        <img
+          [src]="getCharacterImage()"
+          [alt]="character.name"
+          class="w-full h-full object-cover"
+          [class.hidden]="imageLoading"
+          (load)="onImageLoad()"
+          (error)="onImageError()"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+      </div>
+
+      <div class="relative z-10 container mx-auto px-4">
+        <div class="max-w-2xl">
+          <!-- Back Button -->
+          <div class="mb-8">
+            <a 
+              [routerLink]="['/characters']" 
+              class="inline-flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors"
+            >
+              <lucide-angular [img]="ArrowLeftIcon" [size]="20"></lucide-angular>
+              <span>Voltar aos Personagens</span>
+            </a>
+          </div>
+
+          <!-- Character Icon -->
+          <div class="mb-4">
+            <div class="inline-block bg-yellow-400 text-black p-3 rounded-full">
+              <lucide-angular [img]="UserIcon" [size]="32"></lucide-angular>
+            </div>
+          </div>
+
+          <!-- Name -->
+          <h1
+            class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 font-orbitron"
+          >
+            {{ character.name }}
+          </h1>
+
+          <!-- Basic Info -->
+          <div class="flex flex-wrap items-center gap-6 text-gray-300 mb-8">
+            @if (character.birth_year !== 'unknown') {
+              <div class="flex items-center space-x-2">
+                <lucide-angular [img]="CalendarIcon" [size]="20"></lucide-angular>
+                <span>{{ character.birth_year }}</span>
+              </div>
+            }
+            @if (character.gender !== 'unknown') {
+              <div class="flex items-center space-x-2">
+                <lucide-angular [img]="UserIcon" [size]="20"></lucide-angular>
+                <span class="capitalize">{{ character.gender }}</span>
+              </div>
+            }
+            <!-- Additional info from image API -->
+            @if (characterInfo && characterInfo.species) {
+    <div class="flex items-center space-x-2">
+      <lucide-angular [img]="UserIcon" [size]="20"></lucide-angular>
+      <span class="capitalize">{{ characterInfo.species }}</span>
+    </div>
+  }
+          </div>
+
+          <!-- Physical Characteristics -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <!-- Height from SWAPI or Image API -->
+            @if (character.height !== 'unknown' || getCharacterHeight()) {
+              <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                <lucide-angular [img]="RulerIcon" [size]="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                <div class="text-white font-bold">
+                  {{ getCharacterHeight() || character.height }}
+                  {{ getCharacterHeight() ? 'm' : 'cm' }}
+                </div>
+                <div class="text-gray-400 text-sm">Altura</div>
+              </div>
+            }
+            
+            <!-- Mass from SWAPI or Image API -->
+            @if (character.mass !== 'unknown' || getCharacterMass()) {
+              <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                <lucide-angular [img]="WeightIcon" [size]="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                <div class="text-white font-bold">
+                  {{ getCharacterMass() || character.mass }}kg
+                </div>
+                <div class="text-gray-400 text-sm">Peso</div>
+              </div>
+            }
+            
+            @if (character.eye_color !== 'unknown') {
+              <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                <lucide-angular [img]="EyeIcon" [size]="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                <div class="text-white font-bold capitalize">{{ character.eye_color }}</div>
+                <div class="text-gray-400 text-sm">Olhos</div>
+              </div>
+            }
+            
+            @if (character.hair_color !== 'unknown' && character.hair_color !== 'n/a') {
+              <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                <lucide-angular [img]="UserIcon" [size]="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                <div class="text-white font-bold capitalize">{{ character.hair_color }}</div>
+                <div class="text-gray-400 text-sm">Cabelo</div>
+              </div>
+            }
+          </div>
+
+          <!-- Additional Info from Image API -->
+          @if (characterInfo) {
+            <div class="bg-gradient-to-r from-yellow-400/10 to-yellow-600/10 border border-yellow-400/20 rounded-xl p-6 mb-8">
+              <h3 class="text-xl font-bold text-yellow-400 mb-4">Informações Adicionais</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                @if (characterInfo.species) {
+                  <div>
+                    <span class="text-gray-400">Espécie:</span>
+                    <p class="text-white font-semibold capitalize">{{ characterInfo.species }}</p>
+                  </div>
+                }
+                @if (characterInfo.homeworld) {
+                  <div>
+                    <span class="text-gray-400">Planeta Natal:</span>
+                    <p class="text-white font-semibold capitalize">{{ characterInfo.homeworld }}</p>
+                  </div>
+                }
+                @if (characterInfo.gender) {
+                  <div>
+                    <span class="text-gray-400">Gênero:</span>
+                    <p class="text-white font-semibold capitalize">{{ characterInfo.gender }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Details Section -->
+    <section class="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
+      <div class="container mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <!-- Physical Details -->
+          <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6">Características Físicas</h3>
+            <div class="space-y-4">
+              @if (character.skin_color !== 'unknown') {
+                <div>
+                  <span class="text-gray-400">Cor da Pele:</span>
+                  <p class="text-white font-semibold capitalize">{{ character.skin_color }}</p>
+                </div>
+              }
+              @if (character.hair_color !== 'unknown' && character.hair_color !== 'n/a') {
+                <div>
+                  <span class="text-gray-400">Cor do Cabelo:</span>
+                  <p class="text-white font-semibold capitalize">{{ character.hair_color }}</p>
+                </div>
+              }
+              @if (character.eye_color !== 'unknown') {
+                <div>
+                  <span class="text-gray-400">Cor dos Olhos:</span>
+                  <p class="text-white font-semibold capitalize">{{ character.eye_color }}</p>
+                </div>
+              }
+              <!-- Additional physical details from image API -->
+              @if (characterInfo && (getCharacterHeight() || getCharacterMass())) {
+                <div class="pt-4 border-t border-gray-700">
+                  <h4 class="text-yellow-400 font-semibold mb-2">Dados da API de Imagens</h4>
+                  @if (getCharacterHeight()) {
+                    <div>
+                      <span class="text-gray-400">Altura:</span>
+                      <p class="text-white font-semibold">{{ getCharacterHeight() }}m</p>
+                    </div>
+                  }
+                  @if (getCharacterMass()) {
+                    <div>
+                      <span class="text-gray-400">Peso:</span>
+                      <p class="text-white font-semibold">{{ getCharacterMass() }}kg</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6">Aparições</h3>
+            <div class="space-y-4">
+              <div>
+                <span class="text-gray-400">Filmes:</span>
+                <p class="text-white font-semibold">{{ character.films.length }}</p>
+              </div>
+              <div>
+                <span class="text-gray-400">Veículos:</span>
+                <p class="text-white font-semibold">{{ character.vehicles.length }}</p>
+              </div>
+              <div>
+                <span class="text-gray-400">Naves:</span>
+                <p class="text-white font-semibold">{{ character.starships.length }}</p>
+              </div>
+              <div>
+                <span class="text-gray-400">Espécies:</span>
+                <p class="text-white font-semibold">{{ character.species.length || 1 }}</p>
+              </div>
+            </div>
+
+            <!-- Additional info section -->
+            <div class="mt-6 pt-6 border-t border-gray-700">
+              <h4 class="text-yellow-400 font-semibold mb-3">Informações do Personagem</h4>
+              <div class="text-center">
+                <p class="text-gray-400 text-sm">ID do Personagem</p>
+                <p class="text-yellow-400 font-mono">{{ getCharacterId() }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Links -->
+          <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6">Explorar Mais</h3>
+            <div class="space-y-3">
+              <a 
+                [routerLink]="['/movies']" 
+                class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300"
+              >
+                <span class="text-yellow-400 font-semibold">Ver Filmes</span>
+              </a>
+              <a 
+                [routerLink]="['/planets']" 
+                class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300"
+              >
+                <span class="text-yellow-400 font-semibold">Explorar Planetas</span>
+              </a>
+              <a 
+                [routerLink]="['/vehicles']" 
+                class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300"
+              >
+                <span class="text-yellow-400 font-semibold">Ver Veículos</span>
+              </a>
+              <a 
+                [routerLink]="['/characters']" 
+                class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300"
+              >
+                <span class="text-yellow-400 font-semibold">Todos os Personagens</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</div>

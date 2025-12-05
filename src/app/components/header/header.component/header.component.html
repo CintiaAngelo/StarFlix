@@ -1,0 +1,72 @@
+<header class="relative z-50 bg-black/80 backdrop-blur-md border-b border-yellow-400/30">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      
+      <a 
+        routerLink="/" 
+        class="flex items-center space-x-3"
+        (click)="closeMenu()"
+      >
+        <div
+          class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 transition-transform hover:scale-105 font-orbitron"
+        >
+          STARFLIX
+        </div>
+      </a>
+
+      <nav class="hidden md:flex items-center space-x-8">
+        @for (item of navItems; track $index) {
+          <a
+            [routerLink]="item.path"
+            class="relative px-3 py-2 text-sm font-medium transition-colors duration-300"
+            [class.text-yellow-400]="isActive(item.path)"
+            [class.text-gray-300]="!isActive(item.path)"
+            [class.hover\\:text-yellow-400]="!isActive(item.path)"
+          >
+            {{ item.label }}
+            @if (isActive(item.path)) {
+              <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-400 transition-all duration-300"></div>
+            }
+          </a>
+        }
+      </nav>
+
+      <!-- Mobile Menu Button -->
+      <button
+        (click)="toggleMenu()"
+        class="md:hidden p-2 text-yellow-400 hover:text-yellow-300 transition-colors"
+      >
+        <lucide-angular 
+          [img]="isMenuOpen ? XIcon : MenuIcon" 
+          [size]="24"
+        ></lucide-angular>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav
+      class="md:hidden overflow-hidden transition-all duration-300 ease-in-out"
+      [class.h-auto]="isMenuOpen"
+      [class.h-0]="!isMenuOpen"
+      [class.opacity-100]="isMenuOpen"
+      [class.opacity-0]="!isMenuOpen"
+    >
+      <div class="py-4 space-y-2">
+        @for (item of navItems; track $index) {
+          <a
+            [routerLink]="item.path"
+            (click)="closeMenu()"
+            class="block px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-300"
+            [class.text-yellow-400]="isActive(item.path)"
+            [class.bg-yellow-400/10]="isActive(item.path)"
+            [class.text-gray-300]="!isActive(item.path)"
+            [class.hover\\:text-yellow-400]="!isActive(item.path)"
+            [class.hover\\:bg-yellow-400/5]="!isActive(item.path)"
+          >
+            {{ item.label }}
+          </a>
+        }
+      </div>
+    </nav>
+  </div>
+</header>

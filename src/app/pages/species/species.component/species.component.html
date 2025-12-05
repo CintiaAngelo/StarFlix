@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-black">
+  @if (loading) {
+    <app-spinner></app-spinner>
+  } @else {
+    <div class="py-20 px-4">
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6" style="font-family: 'Orbitron';">
+            ESPÉCIES
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Descubra as diferentes formas de vida da galáxia
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          @for (specie of species; track specie.url; let i = $index) {
+            <div 
+              class="group animate-fade-in"
+              [style.animation-delay]="'${i * 0.1}s'"
+            >
+              <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 h-full flex flex-col">
+                
+                <div class="relative h-56 overflow-hidden flex-shrink-0">
+                  <img 
+                    [src]="specie.image" 
+                    [alt]="specie.name"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    (error)="onImageError(specie)"
+                  >
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+
+             
+
+                </div>
+
+                <div class="p-6 flex-grow flex flex-col">
+                  <h3 class="text-2xl font-bold text-yellow-400 mb-4 group-hover:text-yellow-300 transition-colors">
+                    {{ specie.name }}
+                  </h3>
+                  
+                  <div class="space-y-3 text-sm flex-grow">
+                    @if (specie.classification && specie.classification !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="DnaIcon" size="16"></lucide-angular>
+                        <span>Classificação: {{ specie.classification }}</span>
+                      </div>
+                    }
+                    
+                    @if (specie.average_height !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="RulerIcon" size="16"></lucide-angular>
+                        <span>Altura média: {{ formatHeight(specie.average_height) }}</span>
+                      </div>
+                    }
+                    
+                    @if (specie.average_lifespan !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="ClockIcon" size="16"></lucide-angular>
+                        <span>Expectativa de vida: {{ formatLifespan(specie.average_lifespan) }}</span>
+                      </div>
+                    }
+                    
+                    @if (specie.language !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="MessageCircleIcon" size="16"></lucide-angular>
+                        <span>Língua: {{ specie.language }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Additional Info -->
+                  <div class="mt-4 pt-4 border-t border-gray-700">
+                    <div class="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                      @if (specie.skin_colors && specie.skin_colors !== 'unknown') {
+                        <div>
+                          <span class="font-semibold">Pele:</span> {{ specie.skin_colors }}
+                        </div>
+                      }
+                      @if (specie.eye_colors && specie.eye_colors !== 'unknown') {
+                        <div>
+                          <span class="font-semibold">Olhos:</span> {{ specie.eye_colors }}
+                        </div>
+                      }
+                      @if (specie.hair_colors && specie.hair_colors !== 'unknown') {
+                        <div>
+                          <span class="font-semibold">Cabelo:</span> {{ specie.hair_colors }}
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Load More Section -->
+        <div class="text-center">
+          @if (hasNextPage) {
+            <button 
+              (click)="loadMoreSpecies()" 
+              [disabled]="loadingMore"
+              class="inline-flex items-center space-x-3 bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              @if (loadingMore) {
+                <lucide-angular 
+                  [img]="LoaderIcon" 
+                  size="20" 
+                  class="animate-spin"
+                ></lucide-angular>
+                <span>Carregando Mais Espécies...</span>
+              } @else {
+                <span>Carregar Mais Espécies</span>
+              }
+            </button>
+          } @else if (species.length > 0) {
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 max-w-md mx-auto">
+              <lucide-angular 
+                [img]="DnaIcon" 
+                size="32" 
+                class="text-yellow-400 mx-auto mb-4"
+              ></lucide-angular>
+              <h3 class="text-xl font-bold text-white mb-2">Todas as Espécies Carregadas!</h3>
+              <p class="text-gray-400">Você descobriu todas as espécies conhecidas da galáxia.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

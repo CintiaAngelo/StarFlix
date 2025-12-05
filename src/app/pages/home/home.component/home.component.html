@@ -1,0 +1,168 @@
+<div class="min-h-screen bg-black relative">
+  <!-- Stars Background -->
+  <app-stars-background [starCount]="100"></app-stars-background>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- Efeito de hiperespaço -->
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/5 to-transparent animate-pulse"></div>
+    
+    <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+      <!-- Logo Star Wars animado -->
+      <div class="mb-8 transform perspective-1000">
+        <h1 class="text-7xl md:text-9xl font-black text-yellow-400 font-orbitron mb-4 tracking-wider transform-gpu hover:scale-105 transition-transform duration-1000">
+          STAR WARS
+        </h1>
+        <div class="w-64 h-1 bg-yellow-400 mx-auto mb-4 rounded-full animate-pulse"></div>
+        <p class="text-yellow-300 text-lg md:text-xl font-orbitron tracking-widest">
+          GALACTIC STARFLIX
+        </p>
+      </div>
+
+      <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+        Uma galáxia de conhecimento à sua espera. Explore arquivos secretos da Aliança Rebelde 
+        e do Império Galáctico em nosso portal.
+      </p>
+
+      <!-- Botão de Acesso Principal -->
+      <div class="mb-16">
+        <a [routerLink]="'/movies'" 
+           class="group relative inline-flex items-center space-x-4 bg-yellow-400 hover:bg-yellow-300 text-black px-12 py-6 rounded-full font-bold text-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:shadow-yellow-400/50 border-2 border-yellow-400">
+          <div class="relative">
+            <lucide-angular [img]="PlayIcon" size="28" 
+                           class="group-hover:animate-pulse"></lucide-angular>
+            <div class="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-0 group-hover:opacity-30"></div>
+          </div>
+          <span class="font-orbitron tracking-wider">Comece sua Jornada</span>
+          <div class="absolute -inset-1 bg-yellow-400 rounded-full blur opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div class="w-6 h-10 border-2 border-yellow-400 rounded-full flex justify-center">
+        <div class="w-1 h-3 bg-yellow-400 rounded-full mt-2 animate-pulse"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galactic Stats -->
+  <section class="py-16 px-4 bg-black/80 backdrop-blur-sm border-y border-yellow-400/20">
+    <div class="container mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="group">
+          <div class="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 font-orbitron group-hover:scale-110 transition-transform">80+</div>
+          <div class="text-gray-400 text-sm uppercase tracking-wider">Personagens</div>
+        </div>
+        <div class="group">
+          <div class="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 font-orbitron group-hover:scale-110 transition-transform">60+</div>
+          <div class="text-gray-400 text-sm uppercase tracking-wider">Planetas</div>
+        </div>
+        <div class="group">
+          <div class="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 font-orbitron group-hover:scale-110 transition-transform">30+</div>
+          <div class="text-gray-400 text-sm uppercase tracking-wider">Espécies</div>
+        </div>
+        <div class="group">
+          <div class="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 font-orbitron group-hover:scale-110 transition-transform">30+</div>
+          <div class="text-gray-400 text-sm uppercase tracking-wider">Veículos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galactic Factions -->
+  <section class="py-20 px-4">
+    <div class="container mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-yellow-400 font-orbitron tracking-wider">
+        FACÇÕES GALÁCTICAS
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <!-- Rebel Alliance -->
+        <div class="group relative bg-gradient-to-br from-blue-900/20 to-cyan-900/20 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-8 hover:border-blue-400/60 transition-all duration-500 overflow-hidden">
+          <div class="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                <lucide-angular [img]="UsersIcon" size="24" class="text-white"></lucide-angular>
+              </div>
+              <h3 class="text-2xl font-bold text-blue-400 font-orbitron">ALIANÇA REBELDE</h3>
+            </div>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              Lute pela liberdade da galáxia. Explore os heróis que desafiaram o Império 
+              e restauraram a esperança nos sistemas estelares.
+            </p>
+          </div>
+        </div>
+
+        <!-- Galactic Empire -->
+        <div class="group relative bg-gradient-to-br from-red-900/20 to-gray-900/20 backdrop-blur-sm border border-red-500/30 rounded-2xl p-8 hover:border-red-400/60 transition-all duration-500 overflow-hidden">
+          <div class="absolute inset-0 bg-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative z-10">
+            <div class="flex items-center mb-6">
+              <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mr-4">
+                <lucide-angular [img]="GlobeIcon" size="24" class="text-white"></lucide-angular>
+              </div>
+              <h3 class="text-2xl font-bold text-red-400 font-orbitron">IMPERIO GALÁCTICO</h3>
+            </div>
+            <p class="text-gray-300 mb-6 leading-relaxed">
+              Ordem e poder absoluto. Descubra os líderes, naves estelares e planetas 
+              que formaram o maior império da galáxia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Planets -->
+  <section class="py-20 px-4 bg-gradient-to-b from-black to-gray-900/50">
+    <div class="container mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-yellow-400 font-orbitron tracking-wider">
+        EXPLORE PLANETAS 
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div *ngFor="let planet of featuredPlanets" class="group">
+          <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-6 hover:border-yellow-400/50 transition-all duration-500 h-full">
+            <div class="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <lucide-angular [img]="GlobeIcon" size="24" class="text-black"></lucide-angular>
+            </div>
+            <h3 class="text-xl font-bold text-yellow-400 mb-2">{{ planet.name }}</h3>
+            <p class="text-gray-400 text-sm mb-4">{{ planet.description }}</p>
+            <div class="text-xs text-gray-500">
+              <span class="text-yellow-400">Clima:</span> {{ planet.climate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 px-4 relative">
+    <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/5 via-transparent to-yellow-400/5"></div>
+    <div class="relative z-10 container mx-auto text-center">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6 text-yellow-400 font-orbitron">
+        SUA JORNADA COMEÇA AQUI
+      </h2>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+        Acesse arquivos classificados, relatórios de missão e dados estratégicos 
+        de toda a galáxia. A Força guiará seu caminho.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a [routerLink]="'/movies'"
+           class="group bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 text-black px-8 py-4 rounded-full font-bold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3">
+          <lucide-angular [img]="FilmIcon" size="24"></lucide-angular>
+          <span>FILMES</span>
+        </a>
+        <a [routerLink]="'/characters'"
+           class="group border-2 border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black px-8 py-4 rounded-full font-bold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3">
+          <lucide-angular [img]="UsersIcon" size="24"></lucide-angular>
+          <span>ARQUIVOS DE PERSONAGENS</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

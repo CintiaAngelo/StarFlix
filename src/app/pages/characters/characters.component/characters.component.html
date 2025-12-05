@@ -1,0 +1,150 @@
+<div class="min-h-screen bg-black">
+  @if (loading) {
+  <app-spinner></app-spinner>
+  } @else {
+    <div class="py-20 px-4">
+      <div class="container mx-auto">
+        <div class="text-center mb-16">
+          <h1
+            class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 font-orbitron"
+          >
+            PERSONAGENS
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Conheça os heróis e vilões que marcaram o universo Star Wars!
+          </p>
+        </div>
+
+        @if (characters.length === 0) {
+          <div class="text-center py-12">
+            <p class="text-gray-400 text-lg">Nenhum personagem encontrado.</p>
+          </div>
+        } @else {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            @for (character of characters; track character.name) {
+              <div class="group">
+                <a [routerLink]="['/characters', getCharacterId(character.url)]">
+                  <div
+                    class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 h-full"
+                  >
+                  
+                    <div class="relative h-48 overflow-hidden">
+                      <img
+                        [src]="character.image"
+                        [alt]="character.name"
+                        class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                        (error)="onImageError(character)"
+                      />
+                      <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                      
+                      
+                      <div class="absolute top-4 right-4">
+                        <div class="bg-yellow-400 text-black p-2 rounded-full">
+                          <lucide-angular [img]="UserIcon" [size]="16"></lucide-angular>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="p-5">
+                      <h3
+                        class="text-xl font-bold text-yellow-400 mb-3 group-hover:text-yellow-300 transition-colors"
+                      >
+                        {{ character.name }}
+                      </h3>
+
+                      <div class="space-y-2 text-sm">
+                        @if (character.height !== 'unknown') {
+                          <div class="flex items-center space-x-2 text-gray-400">
+                            <lucide-angular [img]="RulerIcon" [size]="14"></lucide-angular>
+                            <span>Altura: {{ character.height }}cm</span>
+                          </div>
+                        }
+                        
+                        @if (character.mass !== 'unknown') {
+                          <div class="flex items-center space-x-2 text-gray-400">
+                            <lucide-angular [img]="WeightIcon" [size]="14"></lucide-angular>
+                            <span>Peso: {{ character.mass }}kg</span>
+                          </div>
+                        }
+                        
+                        @if (character.eye_color !== 'unknown') {
+                          <div class="flex items-center space-x-2 text-gray-400">
+                            <lucide-angular [img]="EyeIcon" [size]="14"></lucide-angular>
+                            <span>Olhos: {{ character.eye_color }}</span>
+                          </div>
+                        }
+                      </div>
+
+                      <div class="mt-4 pt-3 border-t border-gray-700">
+                        <div class="flex items-center justify-between">
+                          <span class="text-gray-400 text-sm">
+                            {{ character.birth_year }}
+                          </span>
+                          <span class="text-yellow-400 font-semibold group-hover:text-yellow-300 text-sm">
+                            Ver Detalhes
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            }
+          </div>
+
+          <div class="flex flex-col items-center space-y-6">
+            
+            @if (hasNextPage) {
+              <button
+                (click)="loadMoreCharacters()"
+                [disabled]="loadingMore"
+                class="bg-yellow-400 hover:bg-yellow-300 disabled:bg-yellow-400/50 text-black px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 disabled:scale-100 flex items-center space-x-3"
+              >
+                @if (loadingMore) {
+                  <div class="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                  <span>Carregando...</span>
+                } @else {
+                  <lucide-angular [img]="ChevronRightIcon" [size]="20"></lucide-angular>
+                  <span>Carregar Mais Personagens</span>
+                }
+              </button>
+            }
+
+            <div class="flex items-center space-x-2">
+              <button
+                (click)="goToPage(currentPage - 1)"
+                [disabled]="!hasPreviousPage"
+                class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-yellow-400 disabled:bg-gray-800/50 text-white hover:text-black disabled:text-gray-500 rounded-lg transition-all duration-300"
+              >
+                <lucide-angular [img]="ChevronLeftIcon" [size]="16"></lucide-angular>
+              </button>
+
+              @for (page of getPageNumbers(); track page) {
+                <button
+                  (click)="goToPage(page)"
+                  [class]="page === currentPage 
+                    ? 'w-10 h-10 bg-yellow-400 text-black font-bold rounded-lg' 
+                    : 'w-10 h-10 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-all duration-300'"
+                >
+                  {{ page }}
+                </button>
+              }
+
+              <button
+                (click)="goToPage(currentPage + 1)"
+                [disabled]="!hasNextPage"
+                class="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-yellow-400 disabled:bg-gray-800/50 text-white hover:text-black disabled:text-gray-500 rounded-lg transition-all duration-300"
+              >
+                <lucide-angular [img]="ChevronRightIcon" [size]="16"></lucide-angular>
+              </button>
+            </div>
+
+            <div class="text-gray-400 text-sm">
+              Página {{ currentPage }} de {{ totalPages }}
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

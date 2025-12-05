@@ -1,0 +1,209 @@
+<div class="min-h-screen bg-black">
+  @if (loading) {
+    <app-spinner></app-spinner>
+  } @else if (error) {
+    <!-- Error State -->
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-red-400 text-6xl mb-4">⚠️</div>
+        <h2 class="text-2xl font-bold text-red-400 mb-4">Erro ao carregar filmes</h2>
+        <p class="text-gray-300 mb-6">{{ error }}</p>
+        <button 
+          (click)="fetchMovies()"
+          class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-colors"
+        >
+          Tentar Novamente
+        </button>
+      </div>
+    </div>
+  } @else {
+    <!-- Content -->
+    <div class="py-20 px-4">
+      <div class="container mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-16">
+          <h1
+            class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6 font-orbitron"
+          >
+            A SAGA COMPLETA
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Todos os episódios da saga Star Wars em <strong>ordem cronológica</strong>
+          </p>
+        </div>
+
+        <!-- Movies Grid -->
+        @if (movies.length === 0) {
+          <div class="text-center py-12">
+            <p class="text-gray-400 text-lg">Nenhum filme encontrado.</p>
+          </div>
+        } @else {
+          <div class="space-y-12">
+            <!-- Trilogia Prequel -->
+            <div>
+              <h2 class="text-3xl font-bold text-yellow-400 mb-8 text-center font-orbitron">
+                TRILOGIA PREQUEL
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @for (movie of movies.slice(0, 3); track movie.episode_id) {
+                  <div class="group">
+                    <a [routerLink]="['/movies', getMovieId(movie.url)]">
+                      <div
+                        class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 h-full"
+                      >
+                        <!-- Movie Poster -->
+                        <div class="relative h-64 overflow-hidden">
+                          <img
+                            [src]="getMoviePoster(movie.episode_id)"
+                            [alt]="movie.title"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                          
+                          <!-- Episode Badge -->
+                          <div class="absolute top-4 left-4">
+                            <div class="bg-yellow-400 text-black px-3 py-1 rounded-full font-bold text-sm">
+                              Episódio {{ movie.episode_id }}
+                            </div>
+                          </div>
+
+                          <!-- Play Button -->
+                          <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          >
+                            <div
+                              class="bg-yellow-400 text-black p-4 rounded-full transform scale-75 group-hover:scale-100 transition-transform duration-300"
+                            >
+                              <lucide-angular [img]="playIcon" size="32"></lucide-angular>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Movie Info -->
+                        <div class="p-6">
+                          <h3
+                            class="text-xl font-bold text-yellow-400 mb-3 group-hover:text-yellow-300 transition-colors"
+                          >
+                            {{ getMovieTitle(movie) }}
+                          </h3>
+
+                          <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4">
+                            <div class="flex items-center space-x-1">
+                              <lucide-angular [img]="calendarIcon" size="16"></lucide-angular>
+                              <span>{{ movie.release_date.substring(0,4) }}</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                              <lucide-angular [img]="clockIcon" size="16"></lucide-angular>
+                              <span>{{ getMovieRuntime(movie.episode_id) }}</span>
+                            </div>
+                          </div>
+
+                          <p
+                            class="text-gray-300 text-sm line-clamp-3 group-hover:text-gray-200 transition-colors mb-4"
+                          >
+                            {{ movie.opening_crawl.substring(0, 120) }}...
+                          </p>
+
+                          <div class="flex items-center justify-between">
+                            <span
+                              class="text-yellow-400 font-semibold group-hover:text-yellow-300 text-sm"
+                            >
+                              Ver Detalhes
+                            </span>
+                            <div class="flex items-center space-x-1 text-gray-400 text-sm">
+                              <lucide-angular [img]="starIcon" size="14"></lucide-angular>
+                              <span>{{ movie.director }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Trilogia Original -->
+            <div>
+              <h2 class="text-3xl font-bold text-yellow-400 mb-8 text-center font-orbitron">
+                TRILOGIA ORIGINAL
+              </h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @for (movie of movies.slice(3, 6); track movie.episode_id) {
+                  <div class="group">
+                    <a [routerLink]="['/movies', getMovieId(movie.url)]">
+                      <div
+                        class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 h-full"
+                      >
+                        <!-- Movie Poster -->
+                        <div class="relative h-64 overflow-hidden">
+                          <img
+                            [src]="getMoviePoster(movie.episode_id)"
+                            [alt]="movie.title"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                          
+                      
+
+                          <!-- Play Button -->
+                          <div
+                            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          >
+                            <div
+                              class="bg-yellow-400 text-black p-4 rounded-full transform scale-75 group-hover:scale-100 transition-transform duration-300"
+                            >
+                              <lucide-angular [img]="playIcon" size="32"></lucide-angular>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Movie Info -->
+                        <div class="p-6">
+                          <h3
+                            class="text-xl font-bold text-yellow-400 mb-3 group-hover:text-yellow-300 transition-colors"
+                          >
+                            {{ getMovieTitle(movie) }}
+                          </h3>
+
+                          <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4">
+                            <div class="flex items-center space-x-1">
+                              <lucide-angular [img]="calendarIcon" size="16"></lucide-angular>
+                              <span>{{ movie.release_date.substring(0,4) }}</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                              <lucide-angular [img]="clockIcon" size="16"></lucide-angular>
+                              <span>{{ getMovieRuntime(movie.episode_id) }}</span>
+                            </div>
+                          </div>
+
+                          <p
+                            class="text-gray-300 text-sm line-clamp-3 group-hover:text-gray-200 transition-colors mb-4"
+                          >
+                            {{ movie.opening_crawl.substring(0, 120) }}...
+                          </p>
+
+                          <div class="flex items-center justify-between">
+                            <span
+                              class="text-yellow-400 font-semibold group-hover:text-yellow-300 text-sm"
+                            >
+                              Ver Detalhes
+                            </span>
+                            <div class="flex items-center space-x-1 text-gray-400 text-sm">
+                              <lucide-angular [img]="starIcon" size="14"></lucide-angular>
+                              <span>{{ movie.director }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

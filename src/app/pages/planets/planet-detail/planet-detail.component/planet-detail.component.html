@@ -1,0 +1,178 @@
+<div class="min-h-screen">
+  @if (loading) {
+    <app-spinner></app-spinner>
+  } @else if (planet) {
+    <div class="min-h-screen">
+      <!-- Hero Section -->
+      <section class="relative h-screen flex items-center">
+        <div class="absolute inset-0">
+          <img 
+            [src]="planet.image" 
+            [alt]="planet.name" 
+            class="w-full h-full object-cover"
+            (error)="onImageError()"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 container mx-auto px-4">
+          <div class="max-w-2xl">
+            <!-- Back Button -->
+            <div class="mb-8">
+              <a routerLink="/planets" class="inline-flex items-center space-x-2 text-yellow-400 hover:text-yellow-300 transition-colors">
+                <lucide-angular [img]="ArrowLeftIcon" [size]="20"></lucide-angular>
+                <span>Voltar aos Planetas</span>
+              </a>
+            </div>
+
+            <!-- Planet Icon -->
+            <div class="mb-4">
+              <div class="inline-block bg-yellow-400 text-black p-3 rounded-full">
+                <lucide-angular [img]="GlobeIcon" [size]="32"></lucide-angular>
+              </div>
+            </div>
+
+            <!-- Name -->
+            <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6" style="font-family: Orbitron;">
+              {{ planet.name }}
+            </h1>
+
+            <!-- Basic Info -->
+            <div class="flex flex-wrap items-center gap-6 text-gray-300 mb-8">
+              @if (planet.climate !== 'unknown') {
+                <div class="flex items-center space-x-2">
+                  <lucide-angular [img]="ThermometerIcon" [size]="20"></lucide-angular>
+                  <span class="capitalize">{{ planet.climate }}</span>
+                </div>
+              }
+              @if (planet.terrain !== 'unknown') {
+                <div class="flex items-center space-x-2">
+                  <lucide-angular [img]="MountainIcon" [size]="20"></lucide-angular>
+                  <span class="capitalize">{{ planet.terrain }}</span>
+                </div>
+              }
+            </div>
+
+            <!-- Key Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              @if (planet.diameter !== 'unknown') {
+                <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                  <lucide-angular [img]="GlobeIcon" size="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                  <div class="text-white font-bold">{{ planet.diameter | number }} km</div>
+                  <div class="text-gray-400 text-sm">Diâmetro</div>
+                </div>
+              }
+              @if (planet.population !== 'unknown') {
+                <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                  <lucide-angular [img]="UsersIcon" size="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                  <div class="text-white font-bold">{{ formatPopulation(planet.population) }}</div>
+                  <div class="text-gray-400 text-sm">População</div>
+                </div>
+              }
+              @if (planet.rotation_period !== 'unknown') {
+                <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                  <lucide-angular [img]="ClockIcon" size="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                  <div class="text-white font-bold">{{ planet.rotation_period }}h</div>
+                  <div class="text-gray-400 text-sm">Dia</div>
+                </div>
+              }
+              @if (planet.orbital_period !== 'unknown') {
+                <div class="bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-lg p-4 text-center">
+                  <lucide-angular [img]="ZapIcon" size="24" class="mx-auto mb-2 text-yellow-400"></lucide-angular>
+                  <div class="text-white font-bold">{{ planet.orbital_period }}d</div>
+                  <div class="text-gray-400 text-sm">Ano</div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Details Section -->
+      <section class="py-20 px-4 bg-gradient-to-b from-black to-gray-900">
+        <div class="container mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <!-- Environmental Details -->
+            <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-yellow-400 mb-6">Características Ambientais</h3>
+              <div class="space-y-4">
+                @if (planet.climate !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">Clima:</span>
+                    <p class="text-white font-semibold capitalize">{{ planet.climate }}</p>
+                  </div>
+                }
+                @if (planet.terrain !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">Terreno:</span>
+                    <p class="text-white font-semibold capitalize">{{ planet.terrain }}</p>
+                  </div>
+                }
+                @if (planet.surface_water !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">Água Superficial:</span>
+                    <p class="text-white font-semibold">{{ planet.surface_water }}%</p>
+                  </div>
+                }
+                @if (planet.gravity !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">Gravidade:</span>
+                    <p class="text-white font-semibold">{{ planet.gravity }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-yellow-400 mb-6">Estatísticas</h3>
+              <div class="space-y-4">
+                <div>
+                  <span class="text-gray-400">Residentes Conhecidos:</span>
+                  <p class="text-white font-semibold">{{ planet.residents.length }}</p>
+                </div>
+                <div>
+                  <span class="text-gray-400">Aparições em Filmes:</span>
+                  <p class="text-white font-semibold">{{ planet.films.length }}</p>
+                </div>
+                @if (planet.diameter !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">Diâmetro:</span>
+                    <p class="text-white font-semibold">{{ planet.diameter | number }} km</p>
+                  </div>
+                }
+                @if (planet.population !== 'unknown') {
+                  <div>
+                    <span class="text-gray-400">População Total:</span>
+                    <p class="text-white font-semibold">{{ formatPopulation(planet.population) }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl p-8">
+              <h3 class="text-2xl font-bold text-yellow-400 mb-6">Explorar Mais</h3>
+              <div class="space-y-3">
+                <a routerLink="/characters" class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300">
+                  <span class="text-yellow-400 font-semibold">Ver Personagens</span>
+                </a>
+                <a routerLink="/movies" class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300">
+                  <span class="text-yellow-400 font-semibold">Ver Filmes</span>
+                </a>
+                <a routerLink="/species" class="block p-3 bg-gray-800/50 rounded-lg hover:bg-yellow-400/10 hover:border-yellow-400 border border-transparent transition-all duration-300">
+                  <span class="text-yellow-400 font-semibold">Explorar Espécies</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  } @else {
+    <div class="min-h-screen flex items-center justify-center text-center">
+      <h2 class="text-2xl font-bold text-red-400 mb-4">Planeta não encontrado</h2>
+      <a routerLink="/planets" class="text-yellow-400 hover:text-yellow-300">Voltar aos planetas</a>
+    </div>
+  }
+</div>

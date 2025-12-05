@@ -1,0 +1,191 @@
+<footer class="relative bg-black border-t border-yellow-400/20 py-16 overflow-hidden">
+  <div class="absolute inset-0 overflow-hidden">
+    @for (star of stars; track $index) {
+      <div 
+        class="absolute w-1 h-1 bg-yellow-300 rounded-full animate-pulse"
+        [style.left.%]="star.left"
+        [style.top.%]="star.top"
+        [style.animation-delay]="star.animationDelay"
+        [style.animation-duration]="star.animationDuration"
+      ></div>
+    }
+    <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/3 via-transparent to-blue-400/3"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+      
+      <div class="lg:col-span-2">
+        <div class="mb-8">
+          <div class="flex items-center mb-4">
+            <div class="relative">
+              <lucide-angular 
+                [img]="StarIcon" 
+                class="w-8 h-8 text-yellow-400 mr-3 animate-pulse"
+              ></lucide-angular>
+              <div class="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-20"></div>
+            </div>
+            <h3 class="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent font-orbitron">
+              StarFlix
+            </h3>
+          </div>
+          
+          <p class="text-gray-300 text-lg leading-relaxed max-w-lg">
+            Explore a galáxia Star Wars com dados oficiais da SWAPI. 
+            Descubra personagens, planetas, naves e muito mais deste universo épico.
+          </p>
+        </div>
+
+        <div class="bg-black/80 backdrop-blur-sm border border-yellow-400/20 rounded-xl p-6 hover:border-yellow-400/40 transition-all duration-500">
+          <div class="flex items-center mb-4">
+            <lucide-angular [img]="CodeIcon" class="w-5 h-5 text-yellow-400 mr-2"></lucide-angular>
+            <span class="text-yellow-300 font-semibold text-sm uppercase tracking-wider">Desenvolvido por</span>
+          </div>
+          
+          <h4 class="text-xl font-bold text-yellow-400 mb-2 font-orbitron">
+            Cíntia Cristina Braga Angelo
+          </h4>
+          <p class="text-gray-400 text-sm mb-4">
+            Desenvolvedora Full-Stack
+          </p>
+
+          <div class="flex space-x-3">
+            <a 
+              href="https://github.com/CintiaAngelo" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative w-10 h-10 bg-yellow-400/10 border border-yellow-400/30 rounded-lg flex items-center justify-center hover:bg-yellow-400/20 transition-all duration-300 hover:border-yellow-400/60 hover:scale-110"
+              title="GitHub - CintiaAngelo"
+            >
+              <lucide-angular [img]="GithubIcon" class="w-5 h-5 text-yellow-300 group-hover:text-yellow-400"></lucide-angular>
+              <div class="absolute inset-0 bg-yellow-400 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/cintiabraga/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative w-10 h-10 bg-yellow-400/10 border border-yellow-400/30 rounded-lg flex items-center justify-center hover:bg-yellow-400/20 transition-all duration-300 hover:border-yellow-400/60 hover:scale-110"
+              title="LinkedIn - Cíntia Braga"
+            >
+              <lucide-angular [img]="LinkedinIcon" class="w-5 h-5 text-yellow-300 group-hover:text-yellow-400"></lucide-angular>
+              <div class="absolute inset-0 bg-yellow-400 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            </a>
+            <a 
+              href="mailto:cintiacristinaangelo@gmail.com" 
+              class="group relative w-10 h-10 bg-yellow-400/10 border border-yellow-400/30 rounded-lg flex items-center justify-center hover:bg-yellow-400/20 transition-all duration-300 hover:border-yellow-400/60 hover:scale-110"
+              title="Email - cintiacristinaangelo@gmail.com"
+            >
+              <lucide-angular [img]="MailIcon" class="w-5 h-5 text-yellow-300 group-hover:text-yellow-400"></lucide-angular>
+              <div class="absolute inset-0 bg-yellow-400 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+            </a>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-3 text-xs">
+            <a 
+              href="https://github.com/CintiaAngelo" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-400 hover:text-yellow-400 transition-colors"
+            >
+              github.com/CintiaAngelo
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/cintiabraga/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-400 hover:text-yellow-400 transition-colors"
+            >
+              linkedin.com/in/cintiabraga
+            </a>
+            <a 
+              href="mailto:cintiacristinaangelo@gmail.com" 
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-gray-400 hover:text-yellow-400 transition-colors"
+            >
+              cintiacristinaangelo@gmail.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold text-yellow-400 mb-6 font-orbitron tracking-wider uppercase">
+          EXPLORAR
+        </h4>
+        <ul class="space-y-3">
+          @for (item of navItems; track $index) {
+            <li>
+              <a 
+                [routerLink]="item.path"
+                class="group flex items-center text-gray-300 hover:text-yellow-400 transition-all duration-300 py-2 border-l-2 border-transparent hover:border-yellow-400 hover:bg-yellow-400/5 pl-4 rounded-r-lg"
+              >
+                <lucide-angular 
+                  [img]="StarIcon" 
+                  class="w-3 h-3 mr-3 text-yellow-400 opacity-0 group-hover:opacity-100 transform group-hover:rotate-45 transition-all duration-300"
+                ></lucide-angular>
+                <span class="font-medium group-hover:translate-x-1 transition-transform duration-300">
+                  {{ item.label }}
+                </span>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-bold text-yellow-400 mb-6 font-orbitron tracking-wider uppercase">
+          TECNOLOGIAS
+        </h4>
+        <div class="space-y-3">
+          @for (tech of techStack; track $index) {
+            <div class="flex items-center group">
+              <div class="flex items-center justify-center w-6 h-6 mr-3">
+                <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full group-hover:animate-ping"></div>
+                <div class="absolute w-1.5 h-1.5 bg-yellow-400 rounded-full opacity-60"></div>
+              </div>
+              <span class="text-gray-300 font-medium group-hover:text-yellow-300 transition-colors duration-300">
+                {{ tech }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <div class="mt-8 p-4 bg-yellow-400/5 border border-yellow-400/20 rounded-lg">
+          <div class="flex items-center mb-2">
+            <lucide-angular [img]="StarIcon" class="w-4 h-4 text-yellow-400 mr-2"></lucide-angular>
+            <span class="text-yellow-400 text-sm font-bold">Dados Oficiais</span>
+          </div>
+          <p class="text-gray-400 text-xs">
+            Todas as informações são fornecidas pela SWAPI - The Star Wars API
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-yellow-400/20 pt-8 flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
+      <div class="text-gray-400 text-sm text-center lg:text-left">
+        <span class="text-yellow-400 font-semibold">© {{ currentYear }} StarFlix</span>
+        <span class="text-gray-500 mx-2">•</span>
+        <span>Desenvolvido por Cíntia Angelo</span>
+      </div>
+
+      <div class="flex items-center text-gray-300 text-sm">
+        <span class="mr-2 italic">"Que a Força esteja com você"</span>
+        <div class="relative">
+          <lucide-angular 
+            [img]="StarIcon" 
+            class="w-4 h-4 text-yellow-400 animate-spin"
+            [style.animation-duration]="'3s'"
+          ></lucide-angular>
+          <div class="absolute inset-0 bg-yellow-400 rounded-full animate-ping opacity-30"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-20"></div>
+  
+  <div class="absolute top-0 left-0 w-32 h-32 bg-yellow-400/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-xl"></div>
+  <div class="absolute bottom-0 right-0 w-32 h-32 bg-yellow-400/5 rounded-full translate-x-1/2 translate-y-1/2 blur-xl"></div>
+</footer>

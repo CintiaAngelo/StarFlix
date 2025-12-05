@@ -1,0 +1,153 @@
+<div class="min-h-screen bg-black">
+  @if (loading) {
+    <app-spinner></app-spinner>
+  } @else {
+    <div class="py-20 px-4">
+      <div class="container mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-16">
+          <h1 class="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-600 mb-6" style="font-family: 'Orbitron';">
+            VEÍCULOS
+          </h1>
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Explore as naves e transportes épicos da galáxia
+          </p>
+        </div>
+
+        <!-- Vehicles Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          @for (vehicle of vehicles; track vehicle.url; let i = $index) {
+            <div 
+              class="group animate-fade-in"
+              [style.animation-delay]="'${i * 0.1}s'"
+            >
+              <div class="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm border border-gray-800 rounded-2xl overflow-hidden hover:border-yellow-400/50 transition-all duration-500 h-full flex flex-col">
+                
+                <!-- Vehicle Image -->
+                <div class="relative h-56 overflow-hidden flex-shrink-0">
+                  <img 
+                    [src]="vehicle.image" 
+                    [alt]="vehicle.name" 
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    (error)="onImageError(vehicle)"
+                  >
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+
+                  <!-- Vehicle Icon -->
+                  <div class="absolute top-4 right-4">
+                    <lucide-angular 
+                      [img]="CarIcon" 
+                      size="20" 
+                      class="bg-yellow-400 text-black p-2 rounded-full"
+                    ></lucide-angular>
+                  </div>
+
+                  <!-- Vehicle Class Badge -->
+                  @if (vehicle.vehicle_class !== 'unknown') {
+                    <div class="absolute top-4 left-4">
+                      <span class="bg-blue-600/90 text-white px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm">
+                        {{ vehicle.vehicle_class }}
+                      </span>
+                    </div>
+                  }
+                </div>
+
+                <!-- Vehicle Info -->
+                <div class="p-6 flex-grow flex flex-col">
+                  <h3 class="text-2xl font-bold text-yellow-400 mb-2 group-hover:text-yellow-300 transition-colors">
+                    {{ vehicle.name }}
+                  </h3>
+                  
+                  @if (vehicle.model !== 'unknown') {
+                    <p class="text-gray-400 text-sm mb-4">{{ vehicle.model }}</p>
+                  }
+
+                  <div class="space-y-3 text-sm mb-4 flex-grow">
+                    @if (vehicle.crew !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="UsersIcon" size="16"></lucide-angular>
+                        <span>Tripulação: {{ vehicle.crew }}</span>
+                      </div>
+                    }
+                    
+                    @if (vehicle.passengers !== 'unknown' && vehicle.passengers !== '0') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="UsersIcon" size="16"></lucide-angular>
+                        <span>Passageiros: {{ vehicle.passengers }}</span>
+                      </div>
+                    }
+                    
+                    @if (vehicle.max_atmosphering_speed !== 'unknown' && vehicle.max_atmosphering_speed !== 'n/a') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="ZapIcon" size="16"></lucide-angular>
+                        <span>Velocidade: {{ formatSpeed(vehicle.max_atmosphering_speed) }}</span>
+                      </div>
+                    }
+                    
+                    @if (vehicle.cost_in_credits !== 'unknown') {
+                      <div class="flex items-center space-x-3 text-gray-400">
+                        <lucide-angular [img]="DollarSignIcon" size="16"></lucide-angular>
+                        <span>Custo: {{ formatCredits(vehicle.cost_in_credits) }} créditos</span>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Additional Info -->
+                  <div class="mt-4 space-y-2 border-t border-gray-700 pt-4">
+                    @if (vehicle.manufacturer !== 'unknown') {
+                      <div class="text-xs text-gray-500">
+                        <span class="font-semibold">Fabricante:</span> {{ vehicle.manufacturer }}
+                      </div>
+                    }
+                    @if (vehicle.length !== 'unknown') {
+                      <div class="text-xs text-gray-500">
+                        <span class="font-semibold">Comprimento:</span> {{ formatLength(vehicle.length) }}
+                      </div>
+                    }
+                    @if (vehicle.consumables !== 'unknown') {
+                      <div class="text-xs text-gray-500">
+                        <span class="font-semibold">Suprimentos:</span> {{ vehicle.consumables }}
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Load More Section -->
+        <div class="text-center">
+          @if (hasNextPage) {
+            <button 
+              (click)="loadMoreVehicles()" 
+              [disabled]="loadingMore"
+              class="inline-flex items-center space-x-3 bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              @if (loadingMore) {
+                <lucide-angular 
+                  [img]="LoaderIcon" 
+                  size="20" 
+                  class="animate-spin"
+                ></lucide-angular>
+                <span>Carregando Mais Veículos...</span>
+              } @else {
+                <span>Carregar Mais Veículos</span>
+              }
+            </button>
+          } @else if (vehicles.length > 0) {
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 max-w-md mx-auto">
+              <lucide-angular 
+                [img]="CarIcon" 
+                size="32" 
+                class="text-yellow-400 mx-auto mb-4"
+              ></lucide-angular>
+              <h3 class="text-xl font-bold text-white mb-2">Todos os Veículos Carregados!</h3>
+              <p class="text-gray-400">Você explorou todos os veículos conhecidos da galáxia.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>
